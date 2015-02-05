@@ -9,6 +9,10 @@ html, body {
 	color: white;
 }
 
+div{
+	margin: 0 auto;
+}
+
 div.hidden{
 	display: none;
 }
@@ -23,6 +27,7 @@ canvas{
 }
 
 table{
+	align:"center";
 	border: 1px solid black;
 	border-collapse: collapse;
 }
