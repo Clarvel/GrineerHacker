@@ -121,7 +121,7 @@ var nextGame = function(){
 
 /*--HighScore update Thread--------------------------------------------------*/
 
-var updatethread = setInterval(function(){scoresUpdate();}, 10000);
+var updatethread = setInterval(function(){scoresUpdate();}, 2000);
 scoresUpdate();
 
 var scoresUpdate = function(){
@@ -132,7 +132,7 @@ var scoresUpdate = function(){
 	var entries = xmlDoc.getElementsByTagName('entry');
 	for(var a = 0; a < entries.length; a++){
 		for(var b = 0; b < entries[a].childNodes[b].length; b++){
-			str += entries[a].childNodes[b].nodeValue + "  "
+			str += entries[a].childNodes[b].nodeValue + "  ";
 		}
 		str += "<br>";
 	}
