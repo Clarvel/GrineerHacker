@@ -1,14 +1,16 @@
-<entry>
-	<name>blah</name>
-	<score>0</score>
-	<level>0</level>
-	<clicks>0</clicks>
-	<time>0</time>
-</entry>
-<entry>
-	<name>clar</name>
-	<score>0</score>
-	<level>0</level>
-	<clicks>0</clicks>
-	<time>0</time>
-</entry>
+<entries>
+	<entry>
+		<name>blah</name>
+		<score>0</score>
+		<level>0</level>
+		<clicks>0</clicks>
+		<time>0</time>
+	</entry>
+	<entry>
+		<name>clar</name>
+		<score>0</score>
+		<level>0</level>
+		<clicks>0</clicks>
+		<time>0</time>
+	</entry>
+</entries>
