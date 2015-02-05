@@ -126,7 +126,7 @@ var scoresUpdate = function(){
 
 	var str = "";
 
-	var entries = xmlDoc.getElementsByTagName('entries');
+	var entries = xmlDoc.getElementsByTagName('entry');
 	console.log(entries);
 	for(var a = 0; a < entries.length; a++){ // global list
 		var entry = entries[a].childNodes;
