@@ -10,6 +10,7 @@ html, body {
 }
 
 div{
+	display: inline-block;
 	margin: 0 auto;
 }
 
@@ -27,7 +28,6 @@ canvas{
 }
 
 table{
-	align:"center";
 	border: 1px solid black;
 	border-collapse: collapse;
 }
