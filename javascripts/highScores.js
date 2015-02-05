@@ -22,6 +22,7 @@ var scoresUpdate = function(){
 	console.log(entries);
 	for(var a = 0; a < entries.length; a++){ // global list of entries
 		entries[a] = new entry(entries[a]);
+		console.log('a');
 		str += entries[a].toStr();
 	}
 	console.log("[" + str + "]");
