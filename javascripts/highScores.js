@@ -19,11 +19,12 @@ var scoresUpdate = function(){
 	var str = "";
 
 	var entries = xmlDoc.getElementsByTagName('entry');
+	var entriesArr = [];
 	console.log(entries);
 	for(var a = 0; a < entries.length; a++){ // global list of entries
-		entries[a] = new entry(entries[a]);
-		console.log(entries[a]);
-		str += entries[a].toStr();
+		entriesArr[a] = new entry(entries[a]);
+		console.log(entriesArr[a]);
+		str += entriesArr[a].toStr();
 	}
 	console.log("[" + str + "]");
 	document.getElementById('scoreslist').innerHTML = str;
