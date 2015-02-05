@@ -119,29 +119,3 @@ var nextGame = function(){
 	currGame.StartGame(cx, wedges, speed, consRot, nextGame, undefined);
 }
 
-/*--HighScore update Thread--------------------------------------------------*/
-
-var scoresUpdate = function(){
-	var xmlDoc = loadXML("scores.xml");
-
-	var str = "";
-
-	var entries = xmlDoc.getElementsByTagName('entry');
-	console.log(entries);
-	for(var a = 0; a < entries.length; a++){ // global list
-		var entry = entries[a].childNodes;
-		for(var b = 0; b < entry.length; b++){ // individual entry
-			var values = entry[b].childNodes;
-			for(var c = 0; c < values.length; c++){
-				str += values[c].nodeValue + " ";
-			}
-		}
-		str += "<br>";
-	}
-	console.log("[" + str + "]");
-	document.getElementById('scoreslist').innerHTML = str;
-}
-
-//var updatethread = setInterval(function(){scoresUpdate();}, 2000);
-var blah = scoresUpdate();
-
