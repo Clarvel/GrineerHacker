@@ -8,7 +8,7 @@ var entry = function(xml){
 	this.clicks = xml.getElementsByTagName('clicks')[0].childNodes[0].nodeValue;
 	this.timer = xml.getElementsByTagName('time')[0].childNodes[0].nodeValue;
 
-	var toStr = function(){
+	this.toStr = function(){
 		return this.ident + " " + this.score + " " + this.level + " " + this.clicks + " " + this.timer + "<br>";
 	}
 }
