@@ -10,31 +10,35 @@
 	<body>
 		<div id="main">
 			<h1>Grineer Hacker</h1>
-			<p>Hack Grineer consoles from anywhere!</p>
-			<p>Press spacebar when a wedge lights up to activate it:</p>
-			<img src="images/menus/active.png">
-			<p>However, if you try to activate a wedge that's already activated, you'll undo the original activation!</p>
-			<p>Select a difficulty and start the game:</p>
+			<p>Hack Grineer consoles from anywhere!<br>
+			Press spacebar when a wedge lights up to activate it:<br>
+			<img src="images/menus/active.png"><br>
+			However, if you try to activate a wedge that's already activated, you'll undo the original activation!<br>
+			Select a difficulty and start the game:</p>
 			Select Level:
 			<select id="level">
-				<option value="0">Void(Endless)</option>
-
 				<option value="1">Mercury</option>
-				<option value="2">Venus</option>
 				<option value="3">Earth</option>
-				<option value="4">Mars</option>
-				<option value="5">Jupiter</option>
-				<option value="6">Saturn</option>
-				<option value="7">Uranus</option>
-				<option value="8">Neptune</option>
-				<option value="9">Pluto</option>
-				<option value="10">Sedna</option>
-				<option value="11">Eris</option>
-				<option value="12">Phobos</option>
+				<option value="5">Phobos</option>
+				<option value="7">Saturn</option>
+				<option value="8">Uranus</option>
+				<option value="11">Ceres</option>
+				<option value="13">Sedna</option>
 			</select>
-			<button type="button" id="start" onClick="display('START')">Start</button>
-			<br>
-			<button type="button" onClick="display('scores')">High Scores</button>(Void only)
+			<button type="button" id="L_start" onClick="levelStart()">Start</button>
+			<br><br>
+			Endless:
+			<button type="button" id="E_start" onClick="endlessStart()">Start</button>
+			<button type="button" onClick="display('scores')">High Scores</button>
+			<br><br>
+			<form id="form">
+				Custom:<br>
+				Number Wedges: <input type="number" id="wedges" min="1" max="8" value="1"><br>
+				Rotaton Speed: <input type="number" id="speed" min="1" max="50" value="1"><br>
+				<input type="checkbox" id="consrot" checked> Constant Rotation<br>
+				<button type="button" id="C_start"onclick="customStart()">Start</button>
+			</form>
+
 		</div>
 		<div id="pause" class="hidden">
 			<h1>Game Paused</h1>
@@ -48,7 +52,7 @@
 			<button type="button" onClick="display('main')">Main Menu</button>
 			<!--button type="button" onClick="display('options')">Options</button-->
 			<button type="button" onClick="display('START')">Restart</button>
-			<button type="button" onClick="display('scores')">High Scores</button>
+			<!--button type="button" onClick="display('scores')">High Scores</button-->
 		</div>
 		<div id="scores" class="hidden">
 			<button type="button" onClick="display('PREV')">Back</button>

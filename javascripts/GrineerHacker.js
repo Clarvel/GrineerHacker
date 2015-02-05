@@ -79,6 +79,8 @@ function GrineerHacker(){
 		this.constRot = true;
 		this.wedges = [this.MAX_WEDGES];
 		this.spacePressed = false;
+		this.paused = false;
+		this.ended = false;
 		this.pauseTime = 0;
 		this.stats = {
 			won : false,
@@ -87,15 +89,18 @@ function GrineerHacker(){
 		}
 	}
 
-	this.StartGame = function(ctx, numWedges, startSpd, constRot, endless){ // starts game instance
+	this.StartGame = function(ctx, numWedges, startSpd, constRot, callback, callValue){ // starts game instance
 		//console.log("Starting game: " + numWedges + " " + startSpd + " " + constRot);
 		//console.log(this.imgs);
 		this.reset();
 
-		this.endless = endless;
+		this.ctx = ctx;
+		this.callback = callback;
+		this.numWedges = numWedges;
 		this.setWedges(numWedges);
 		this.speed = startSpd;
 		this.constRot = constRot;
+		this.callValue = callValue;
 
 		var a = this;
 		if(!this.imgs.loaded){
@@ -109,7 +114,62 @@ function GrineerHacker(){
 		a.finishedLoading(ctx);
 	}
 
-	this.finishedLoading = function(ctx){
+	this.pauseGame = function(){
+		// return id game is paused or no game has been started
+		if(this.paused || this.renderer == undefined){
+			return;
+		}
+		this.paused = true;
+
+		this.pauseTime = new Date().getTime(); // to keep track of length of time paused
+
+		clearInterval(this.renderer);
+		this.renderer = undefined;
+	}
+
+	this.resumeGame = function(){
+		// if game is not paused or the game is running
+		if(!this.paused || this.renderer != undefined){
+			return;
+		}
+		this.paused = false;
+
+		var resumeTime = new Date().getTime(); // add paused time to timer stats
+		this.stats.timer += (resumeTime - this.pauseTime);
+
+		var a = this; // resume game
+		this.renderer = setInterval(function(){a.drawFrame();}, 33.333); // draw new frame every 1/24s
+	}
+
+	this.endGame = function(){
+		if(this.ended){
+			return;
+		}
+		this.ended = true;
+		console.log("game ended");
+
+		if(this.renderer != undefined){
+			clearInterval(this.renderer);
+			this.renderer = undefined;
+		}
+
+		this.paused = true;
+
+		this.speed = Math.abs(this.speed);
+		var endTime = new Date().getTime();
+		this.stats.timer = (endTime - this.stats.timer)/1000;
+
+		console.log("\ttime elapsed: " + this.stats.timer + " seconds");
+		console.log("\tclicks: " + this.stats.clicks);
+		console.log("\tspeed: " + this.speed);
+		if(this.callValue == undefined){
+			this.callback();
+		}else{
+			this.callback(this.callValue);
+		}
+	}
+
+	this.finishedLoading = function(){
 		if(!areImgsLoaded(this.imgs)){
 			return;
 		}
@@ -127,9 +187,8 @@ function GrineerHacker(){
 		if(this.renderer == undefined){
 			console.log("starting game instance");
 			var a = this;
-			this.renderer = setInterval(function(){a.drawFrame(ctx);}, 33.333); // draw new frame every 1/24s
+			this.renderer = setInterval(function(){a.drawFrame();}, 33.333); // draw new frame every 1/24s
 		}
-
 	}
 
 	this.checkGoalState = function(){ // return true or false whether goal reached
@@ -140,23 +199,20 @@ function GrineerHacker(){
 				}
 			}
 		}
-		console.log(this.wedges);
+		//console.log(this.wedges);
 		return true;
 	}
 
-	this.drawFrame = function(ctx){ // draws one frame for game
-		if(paused){
-			return;
-		}
+	this.drawFrame = function(){ // draws one frame for game
 		//console.log("drawing frame");
-		ctx.clearRect(0, 0, this.dim[0], this.dim[1]); // clear enough canvas for game
-		ctx.fillStyle = "black";
-		ctx.fillRect(0, 0, this.dim[0], this.dim[1]); // background
-		ctx.fillStyle = "white";
-		ctx.font = "12px Optima";
-		ctx.fillText("Time: " + (new Date().getTime() - this.stats.timer)/1000 + " s", 10, 18);
-		ctx.fillText("Lock Flips: " + this.stats.clicks, 10, 30);
-		ctx.fillText("Speed: " + this.speed, 10, 42);
+		this.ctx.clearRect(0, 0, this.dim[0], this.dim[1]); // clear enough canvas for game
+		//this.ctx.fillStyle = "black";
+		//this.ctx.fillRect(0, 0, this.dim[0], this.dim[1]); // background
+		this.ctx.fillStyle = "white";
+		this.ctx.font = "12px Optima";
+		this.ctx.fillText("Time: " + (new Date().getTime() - this.stats.timer)/1000 + " s", 10, 18);
+		this.ctx.fillText("Lock Flips: " + this.stats.clicks, 10, 30);
+		this.ctx.fillText("Speed: " + this.speed, 10, 42);
 
 		var offset; // wedge offset var
 		var img; // current img var
@@ -164,18 +220,18 @@ function GrineerHacker(){
 		var selWedge = Math.floor((this.timerPos+22.5)%360/45);
 
 		//draw wheel
-		ctx.drawImage(this.imgs.file[this.imgs.names.indexOf("wheel")], this.spacing.margin, this.spacing.margin);
+		this.ctx.drawImage(this.imgs.file[this.imgs.names.indexOf("wheel")], this.spacing.margin, this.spacing.margin);
 
 		// translate to center
-		ctx.translate(this.dim[0]/2, this.dim[1]/2);
-		ctx.fillText("SPACE", -17, 5);
+		this.ctx.translate(this.dim[0]/2, this.dim[1]/2);
+		this.ctx.fillText("SPACE", -17, 5);
 
 			// draw time indicator here
-			ctx.rotate(rad(this.timerPos));
+			this.ctx.rotate(rad(this.timerPos));
 				img = this.imgs.file[this.imgs.names.indexOf("spinner")];
 				var sMargin = this.spacing.margin / 2 - img.width / 2; // make spinner margin, assume spinner dimensions less than margin
-				ctx.drawImage(img, this.imgs.file[this.imgs.names.indexOf("wheel")].height/2 + sMargin, -img.height/2);
-			ctx.rotate(-rad(this.timerPos));
+				this.ctx.drawImage(img, this.imgs.file[this.imgs.names.indexOf("wheel")].height/2 + sMargin, -img.height/2);
+			this.ctx.rotate(-rad(this.timerPos));
 
 			// draw all wedges here
 			//console.log(this.wedges);
@@ -195,7 +251,7 @@ function GrineerHacker(){
 							this.stats.clicks++;
 						}
 					}
-					ctx.drawImage(img, offset, -img.height/2);
+					this.ctx.drawImage(img, offset, -img.height/2);
 
 					// draw lock
 					img = this.imgs.file[this.imgs.names.indexOf("lock")];
@@ -204,35 +260,18 @@ function GrineerHacker(){
 						img = this.imgs.file[this.imgs.names.indexOf("lock1")];
 						offset = this.off.active;
 					}
-					ctx.drawImage(img, offset, -img.height/2);
+					this.ctx.drawImage(img, offset, -img.height/2);
 
 				}
-				ctx.rotate(rad(360 / this.MAX_WEDGES)); // iterate over entire circle
+				this.ctx.rotate(rad(360 / this.MAX_WEDGES)); // iterate over entire circle
 			}
-		ctx.translate(-this.dim[0]/2, -this.dim[1]/2);
+		this.ctx.translate(-this.dim[0]/2, -this.dim[1]/2);
 
 		this.timerPos += this.speed; // update timer position
+
 		if(this.checkGoalState()){
-			console.log("game ended");
-			clearInterval(this.renderer);
-			this.renderer = undefined;
-			var endTime = new Date().getTime();
-			this.stats.timer = (endTime - this.stats.timer - this.pauseTime)/1000;
-			console.log("\ttime elapsed: " + this.stats.timer + " seconds");
-			console.log("\tclicks: " + this.stats.clicks);
-			console.log("\tspeed: " + this.speed);
 			this.stats.won = true;
-			if(this.endless){
-				if(this.numWedges > 2){
-					this.speed = Math.abs(this.speed)+1;
-					if(this.numWedges >= 5){
-						this.constRot = false;
-					}
-				}
-				this.StartGame(ctx, this.numWedges+1, this.speed, this.constRot, this.endless);
-				return;
-			}
-			display("END");
+			this.endGame();
 			return;
 		}
 		this.spacePressed = false;
