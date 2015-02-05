@@ -135,6 +135,6 @@ var scoresUpdate = function(){
 		}
 		str += "<br>";
 	}
-
+	console.log(str);
 	document.getElementById('scoreslist').innerHTML = str;
 }
