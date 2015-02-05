@@ -126,11 +126,15 @@ var scoresUpdate = function(){
 
 	var str = "";
 
-	var entries = xmlDoc.getElementsByTagName('entries');
+	var entries = xmlDoc.getElementsByTagName('entries').childNodes;
 	console.log(entries);
-	for(var a = 0; a < entries.length; a++){
-		for(var b = 0; b < entries[a].childNodes[b].length; b++){
-			str += entries[a].childNodes[b].nodeValue + "  ";
+	for(var a = 0; a < entries.length; a++){ // global list
+		var entry = entries[a].childNodes;
+		for(var b = 0; b < entry.length; b++){ // individual entry
+			var values = entry[b].childNodes;
+			for(var c = 0; c < values.length; c++){
+				str += values[c].nodeValue + " ";
+			}
 		}
 		str += "<br>";
 	}
@@ -138,6 +142,6 @@ var scoresUpdate = function(){
 	document.getElementById('scoreslist').innerHTML = str;
 }
 
-var updatethread = setInterval(function(){scoresUpdate();}, 2000);
+//var updatethread = setInterval(function(){scoresUpdate();}, 2000);
 var blah = scoresUpdate();
 
