@@ -1,7 +1,7 @@
 /*--HighScore update Thread--------------------------------------------------*/
 
 
-var entry = function(xml){
+function entry(xml){
 	this.ident = xml.getElementsByTagName('name')[0].childNodes[0].nodeValue;
 	this.score = xml.getElementsByTagName('score')[0].childNodes[0].nodeValue;
 	this.level = xml.getElementsByTagName('level')[0].childNodes[0].nodeValue;
