@@ -1,5 +1,18 @@
 /*--HighScore update Thread--------------------------------------------------*/
 
+
+var entry = function(xml){
+	this.ident = xml.getElementsByTagName('name')[0].childNodes[0].nodeValue;
+	this.score = xml.getElementsByTagName('score')[0].childNodes[0].nodeValue;
+	this.level = xml.getElementsByTagName('level')[0].childNodes[0].nodeValue;
+	this.clicks = xml.getElementsByTagName('clicks')[0].childNodes[0].nodeValue;
+	this.timer = xml.getElementsByTagName('time')[0].childNodes[0].nodeValue;
+
+	var toStr = function(){
+		return this.ident + " " + this.score + " " + this.level + " " + this.clicks + " " + this.timer + "<br>";
+	}
+}
+
 var scoresUpdate = function(){
 	var xmlDoc = loadXML("scores.xml");
 
@@ -17,15 +30,3 @@ var scoresUpdate = function(){
 
 //var updatethread = setInterval(function(){scoresUpdate();}, 2000);
 var blah = scoresUpdate();
-
-var entry = function(xml){
-	this.ident = xml.getElementsByTagName('name')[0].childNodes[0].nodeValue;
-	this.score = xml.getElementsByTagName('score')[0].childNodes[0].nodeValue;
-	this.level = xml.getElementsByTagName('level')[0].childNodes[0].nodeValue;
-	this.clicks = xml.getElementsByTagName('clicks')[0].childNodes[0].nodeValue;
-	this.timer = xml.getElementsByTagName('time')[0].childNodes[0].nodeValue;
-
-	var toStr = function(){
-		return this.ident + " " + this.score + " " + this.level + " " + this.clicks + " " + this.timer + "<br>";
-	}
-}
