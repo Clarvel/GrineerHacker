@@ -122,6 +122,7 @@ var nextGame = function(){
 /*--HighScore update Thread--------------------------------------------------*/
 
 var updatethread = setInterval(function(){scoresUpdate();}, 10000);
+scoresUpdate();
 
 var scoresUpdate = function(){
 	var xmlDoc = loadXML("scores.xml");
@@ -135,6 +136,6 @@ var scoresUpdate = function(){
 		}
 		str += "<br>";
 	}
-	console.log(str);
+	console.log("[" + str + "]");
 	document.getElementById('scoreslist').innerHTML = str;
 }
