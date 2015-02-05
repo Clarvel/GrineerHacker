@@ -138,5 +138,5 @@ var scoresUpdate = function(){
 }
 
 var updatethread = setInterval(function(){scoresUpdate();}, 2000);
-scoresUpdate();
+var blah = scoresUpdate();
 
