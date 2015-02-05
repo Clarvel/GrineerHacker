@@ -26,7 +26,7 @@ function keydown(evt) {
     }
 }
 
-/*--HTML Callbacks and Event Listeners---------------------------------------*/
+/*--HTML Callbacks----------------------------------------------------------*/
 
 var display = function(option){
 	console.log(option);
@@ -119,3 +119,22 @@ var nextGame = function(){
 	currGame.StartGame(cx, wedges, speed, consRot, nextGame, undefined);
 }
 
+/*--HighScore update Thread--------------------------------------------------*/
+
+var updatethread = setInterval(function(){scoresUpdate();}, 10000);
+
+var scoresUpdate = function(){
+	var xmlDoc = loadXML("scores.xml");
+
+	var str = "";
+
+	var entries = xmlDoc.getElementsByTagName('entry');
+	for(var a = 0; a < entries.length; a++){
+		for(var b = 0; b < entries[a].childNodes[b].length; b++){
+			str += entries[a].childNodes[b].nodeValue + "  "
+		}
+		str += "<br>";
+	}
+
+	document.getElementById('scoreslist').innerHTML = str;
+}

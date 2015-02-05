@@ -15,6 +15,10 @@
 			<img src="images/menus/active.png"><br>
 			However, if you try to activate a wedge that's already activated, you'll undo the original activation!<br>
 			Select a difficulty and start the game:</p>
+			Endless Game:
+			<button type="button" id="E_start" onClick="endlessStart()">Start</button>
+			<button type="button" onClick="display('scores')">High Scores</button>
+			<br><br>			
 			Select Level:
 			<select id="level">
 				<option value="1">Mercury</option>
@@ -27,12 +31,8 @@
 			</select>
 			<button type="button" id="L_start" onClick="levelStart()">Start</button>
 			<br><br>
-			Endless:
-			<button type="button" id="E_start" onClick="endlessStart()">Start</button>
-			<button type="button" onClick="display('scores')">High Scores</button>
-			<br><br>
 			<form id="form">
-				Custom:<br>
+				Custom Level:<br>
 				Number Wedges: <input type="number" id="wedges" min="1" max="8" value="1"><br>
 				Rotaton Speed: <input type="number" id="speed" min="1" max="50" value="1"><br>
 				<input type="checkbox" id="consrot" checked> Constant Rotation<br>
@@ -54,7 +54,9 @@
 			<button type="button" onClick="display('START')">Restart</button>
 			<!--button type="button" onClick="display('scores')">High Scores</button-->
 		</div>
-		<div id="scores" class="hidden">
+		<div id="scores" class="hidden" >
+			<h1>Scores</h1>
+			<p id='scoreslist'></p>
 			<button type="button" onClick="display('PREV')">Back</button>
 		</div>
 		<div id="game" class="hidden">
@@ -62,6 +64,7 @@
 		</div>
 
 		<script src="javascripts/GrineerHacker.js" type="text/javascript"></script>
+		<script src="javascripts/loadSaveXML.js" type="text/javascript"></script>
 		<script src="javascripts/menu.js" type="text/javascript"></script>
 
 		<script>
