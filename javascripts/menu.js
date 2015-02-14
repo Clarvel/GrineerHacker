@@ -3,14 +3,20 @@
 var c = document.getElementById("renderWindow");
 var cx = c.getContext("2d");
 var levelSel = document.getElementById("level");
+var level = 0; // for score calculations
+var clicks = 0; // for score calculations
+var timer = 0; // for score calculations
 var form = document.getElementById("form");
 var time, clicks, startType=0;
+var stats = new Scores(10, 'scoreslist');
 
 /*--Document Variables-------------------------------------------------------*/
 
 var currDisplay = document.getElementById("main");
 var prevDisplay;
 var currGame = new GrineerHacker();
+
+//stats.writeToTable();
 
 /*--------------------------------interrupts---------------------------------*/
 
@@ -29,7 +35,7 @@ function keydown(evt) {
 /*--HTML Callbacks----------------------------------------------------------*/
 
 var display = function(option){
-	console.log(option);
+	//console.log(option);
 	var tmpDisplay = currDisplay;
 
 	if(option == "PREV"){
@@ -38,9 +44,8 @@ var display = function(option){
 		currGame.resumeGame();
 		currDisplay = document.getElementById("game");
 	}else if(option == "START"){
-
 		if(startType == 1){ // level start
-			var level = parseInt(levelSel.value);
+			level = parseInt(levelSel.value);
 			var wedges = 8;
 			var speed = level + 2;
 			var consRot = true;
@@ -53,8 +58,12 @@ var display = function(option){
 
 			currGame.StartGame(cx, wedges, speed, consRot, display, "END");
 		}else if(startType == 2){ // endless start
+			level = 1;
+			clicks = 0;
+			timer = 0;
 			currGame.StartGame(cx, 1, 3, true, nextGame, undefined);
 		}else if(startType == 3){ // custom start
+			level = 0;
 			var wedges = parseInt(form.wedges.value);
 			var speed = parseInt(form.speed.value);
 			var consRot = form.consrot.checked;
@@ -73,8 +82,19 @@ var display = function(option){
 		}else{
 			document.getElementById("results").innerHTML = "Game Ended.";
 		}
-		document.getElementById("stats").innerHTML = "Time Elapsed: " + currGame.stats.timer + " seconds" + "<br />Clicks: " + currGame.stats.clicks + "<br />Speed: " + currGame.speed;
+		if(startType == 2){
+			document.getElementById("endScoreButton").style.display = "inline";
+		}else{
+			document.getElementById("endScoreButton").style.display = "none";
+		}
+
+		document.getElementById("stats").innerHTML = "Time Elapsed: " + currGame.stats.timer + " seconds" +
+													 "<br />Clicks: " + currGame.stats.clicks + 
+													 "<br />Speed: " + currGame.speed;
 		currDisplay = document.getElementById("end");
+	}else if(option == "SCORES"){
+		stats.writeToTable();
+		currDisplay = document.getElementById("scores");
 	}else{
 		currDisplay = document.getElementById(option);
 	}
@@ -99,10 +119,19 @@ function customStart(){
 	display('START');
 }
 
+function resetScores(){
+	console.log("resetting high scores");
+	stats.resetScores();
+}
+
 /*--Functions----------------------------------------------------------------*/
 
-var nextGame = function(){
+var nextGame = function(){ // called after the end of a game
 	if(!currGame.stats.won){ // if you won on endless, continue, else show end screen
+		clicks += currGame.stats.clicks;
+		timer += currGame.stats.timer;
+		var newEntry = makeNewEntry();
+		var newHighScore = stats.addNew(newEntry);
 		display('END');
 		return;
 	}
@@ -116,6 +145,16 @@ var nextGame = function(){
 	if(wedges > 5){
 		consRot = false;
 	}
+	level += 1;
+	clicks += currGame.stats.clicks;
+	timer += currGame.stats.timer;
 	currGame.StartGame(cx, wedges, speed, consRot, nextGame, undefined);
+}
+
+var makeNewEntry = function(){
+	var ident = ""; // only matters if new high-score reached
+	var score = Math.floor(level * 5 - clicks - Math.floor(timer) / level);
+	var tmp = new Entry(ident, score, level, clicks, timer);
+	return tmp;
 }
 

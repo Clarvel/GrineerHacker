@@ -17,8 +17,8 @@
 			Select a difficulty and start the game:</p>
 			Endless Game:
 			<button type="button" id="E_start" onClick="endlessStart()">Start</button>
-			<button type="button" onClick="display('scores')" disabled>High Scores</button>
-			<br>(No high scores until I figure out how to sync with the server, sorry!)
+			<button type="button" onClick="display('SCORES')">High Scores</button>
+			<button type="button" onClick="resetScores()">Reset</button>
 			<br><br>			
 			Select Level:
 			<select id="level">
@@ -53,7 +53,7 @@
 			<button type="button" onClick="display('main')">Main Menu</button>
 			<!--button type="button" onClick="display('options')">Options</button-->
 			<button type="button" onClick="display('START')">Restart</button>
-			<!--button type="button" onClick="display('scores')">High Scores</button-->
+			<button type="button" id="endScoreButton" onClick="display('SCORES')" style="display:none;">High Scores</button>
 		</div>
 		<div id="scores" class="hidden" >
 			<h1>Scores</h1>
@@ -65,7 +65,6 @@
 		</div>
 
 		<script src="javascripts/GrineerHacker.js" type="text/javascript"></script>
-		<script src="javascripts/ioXML.js" type="text/javascript"></script>
 		<script src="javascripts/highScores.js" type="text/javascript"></script>
 		<script src="javascripts/menu.js" type="text/javascript"></script>
 

@@ -1,11 +1,11 @@
-WarframeMiniGames
+Grineer Hacker
 ==========
 
-Play Warframe hacking minigames
+Play the Grineer Hacking minigame from Warframe
 
 ==========
 
 features to be added:
 
-grineer game
-corpus game
+local high-scores
+local session save?
