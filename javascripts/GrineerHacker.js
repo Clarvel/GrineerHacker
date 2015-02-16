@@ -1,6 +1,6 @@
 /*
 Written By Matthew Russell
-Last updated Dec 6, 2014
+Last updated Feb 15, 2015
 */
 
 /*-----------------------------global variables------------------------------*/
@@ -75,9 +75,12 @@ function GrineerHacker(){
 			this.renderer = undefined;
 		}
 		this.speed = 0;
+		this.direction = 1;
 		this.timerPos = -112.5;
 		this.constRot = true;
 		this.wedges = [this.MAX_WEDGES];
+		this.wedSpdVal = 0; // number of wedges activated
+		this.wedIncrem = 1; // value to multiply num wedges activated by to add to timer position
 		this.spacePressed = false;
 		this.paused = false;
 		this.ended = false;
@@ -89,7 +92,7 @@ function GrineerHacker(){
 		}
 	}
 
-	this.StartGame = function(ctx, numWedges, startSpd, constRot, callback, callValue){ // starts game instance
+	this.StartGame = function(ctx, numWedges, startSpd, constRot, wedSpdInc, callback, callValue){ // starts game instance
 		//console.log("Starting game: " + numWedges + " " + startSpd + " " + constRot);
 		//console.log(this.imgs);
 		this.reset();
@@ -99,6 +102,7 @@ function GrineerHacker(){
 		this.numWedges = numWedges;
 		this.setWedges(numWedges);
 		this.speed = startSpd;
+		this.wedSpdInc = wedSpdInc;
 		this.constRot = constRot;
 		this.callValue = callValue;
 
@@ -155,7 +159,7 @@ function GrineerHacker(){
 
 		this.paused = true;
 
-		this.speed = Math.abs(this.speed);
+		this.speed = this.speed;
 		var endTime = new Date().getTime();
 		this.stats.timer = (endTime - this.stats.timer)/1000;
 
@@ -244,9 +248,18 @@ function GrineerHacker(){
 					if(selWedge == a || 8 + selWedge == a){
 						img = this.imgs.file[this.imgs.names.indexOf("wedge1")];
 						if(this.spacePressed){
+							if(this.wedges[a].active){
+								this.wedSpdVal -= 1;
+							}else{
+								this.wedSpdVal += 1;
+							}
 							this.wedges[a].active = !this.wedges[a].active;
-							if(!this.constRot){
-								this.speed = -this.speed;
+							if(!this.constRot){ // if not constant rotation
+								if(this.direction == 1){ // swap direction multiplier
+									this.direction = -1;
+								}else{
+									this.direction = 1;
+								}
 							}
 							this.stats.clicks++;
 						}
@@ -267,7 +280,10 @@ function GrineerHacker(){
 			}
 		this.ctx.translate(-this.dim[0]/2, -this.dim[1]/2);
 
-		this.timerPos += this.speed; // update timer position
+		this.timerPos += this.speed * this.direction; // update timer position
+		if(this.wedSpdInc){ // if speed should increase by number of wedges activated
+			this.timerPos += this.wedIncrem * this.wedSpdVal * this.direction;
+		}
 
 		if(this.checkGoalState()){
 			this.stats.won = true;

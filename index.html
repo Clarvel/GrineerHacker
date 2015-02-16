@@ -19,7 +19,9 @@
 			<button type="button" id="E_start" onClick="endlessStart()">Start</button>
 			<button type="button" onClick="display('SCORES')">High Scores</button>
 			<button type="button" onClick="resetScores()">Reset</button>
-			<br><br>			
+			<br>
+			High scores are saved locally and will persist after closing the window. Press 'reset' to delete any saved high scores.
+			<br><br>
 			Select Level:
 			<select id="level">
 				<option value="1">Mercury</option>
@@ -37,6 +39,7 @@
 				Number Wedges: <input type="number" id="wedges" min="1" max="8" value="1"><br>
 				Rotaton Speed: <input type="number" id="speed" min="1" max="50" value="1"><br>
 				<input type="checkbox" id="consrot" checked> Constant Rotation<br>
+				<input type="checkbox" id="wedspdinc"> Wedge Selection Speed Increase<br>
 				<button type="button" id="C_start"onclick="customStart()">Start</button>
 			</form>
 
