@@ -133,8 +133,9 @@ function resetScores(){
 
 var nextGame = function(){ // called after the end of a game
 	if(!currGame.stats.won){ // if you won on endless, continue, else show end screen
-		clicks += currGame.stats.clicks;
-		timer += currGame.stats.timer;
+		//dond add failed game to score
+		//clicks += currGame.stats.clicks;
+		//timer += currGame.stats.timer;
 		var newEntry = makeNewEntry();
 		var newHighScore = stats.addNew(newEntry);
 		display('END');
@@ -163,6 +164,9 @@ var nextGame = function(){ // called after the end of a game
 var makeNewEntry = function(){
 	var ident = ""; // only matters if new high-score reached
 	var score = Math.floor(level * 5 - clicks - Math.floor(timer) / level);
+	if(score < 0){
+		score = 0;
+	}
 	var tmp = new Entry(ident, score, level, clicks, timer);
 	return tmp;
 }
