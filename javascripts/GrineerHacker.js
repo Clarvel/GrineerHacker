@@ -214,9 +214,11 @@ function GrineerHacker(){
 		this.ctx.fillStyle = "black";
 		this.ctx.fillRect(0, 0, this.dim[0], this.dim[1]); // background
 		*/
-		/* // debug tools
+		// debug tools
 		this.ctx.fillStyle = "white";
 		this.ctx.font = "12px Optima";
+		
+		/*
 		this.ctx.fillText("Time: " + (new Date().getTime() - this.stats.timer)/1000 + " s", 10, 18);
 		this.ctx.fillText("Lock Flips: " + this.stats.clicks, 10, 30);
 		this.ctx.fillText("Speed: " + (this.speed + this.wedSpdVal*this.wedIncrem), 10, 42);
