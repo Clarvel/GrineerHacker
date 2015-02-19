@@ -9,6 +9,7 @@ var timer = 0; // for score calculations
 var form = document.getElementById("form");
 var time, clicks, startType=0;
 var stats = new Scores(10, 'scoreslist');
+var sound = true;
 
 /*--Document Variables-------------------------------------------------------*/
 
@@ -60,12 +61,12 @@ var display = function(option){
 				wedSpdInc = true;
 			}
 
-			currGame.StartGame(cx, wedges, speed, consRot, wedSpdInc, display, "END");
+			currGame.StartGame(cx, wedges, speed, consRot, wedSpdInc, sound, display, "END");
 		}else if(startType == 2){ // endless start
 			level = 1;
 			clicks = 0;
 			timer = 0;
-			currGame.StartGame(cx, 1, 3, true, false, nextGame, undefined);
+			currGame.StartGame(cx, 1, 3, true, false, sound, nextGame, undefined);
 		}else if(startType == 3){ // custom start
 			level = 0;
 			var wedges = parseInt(form.wedges.value);
@@ -73,7 +74,7 @@ var display = function(option){
 			var consRot = form.consrot.checked;
 			var wedSpdInc = form.wedspdinc.checked;
 
-			currGame.StartGame(cx, wedges, speed, consRot, wedSpdInc, display, "END");
+			currGame.StartGame(cx, wedges, speed, consRot, wedSpdInc, sound, display, "END");
 		}
 
 		currDisplay = document.getElementById("game");
@@ -129,6 +130,10 @@ function resetScores(){
 	stats.resetScores();
 }
 
+function toggleSound(){
+	sound = !sound;
+}
+
 /*--Functions----------------------------------------------------------------*/
 
 var nextGame = function(){ // called after the end of a game
@@ -158,7 +163,7 @@ var nextGame = function(){ // called after the end of a game
 	level += 1;
 	clicks += currGame.stats.clicks;
 	timer += currGame.stats.timer;
-	currGame.StartGame(cx, wedges, speed, consRot, wedSpdInc, nextGame, undefined);
+	currGame.StartGame(cx, wedges, speed, consRot, wedSpdInc, sound, nextGame, undefined);
 }
 
 var makeNewEntry = function(){

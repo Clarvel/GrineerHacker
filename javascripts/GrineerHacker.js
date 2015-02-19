@@ -54,16 +54,23 @@ function GrineerHacker(){
 		path : "./images/grineerHacker/",
 		ext : ".png",
 		file : [],
-		loaded :  false,
+		loaded :  false
 	};
 	this.MAX_WEDGES = 8;
 	this.spacing  = {
-		margin : 50,
+		margin : 50
 	};
 	this.off = { // offsets for wedges
 		wedge : 102,
 		lock : 82,
-		active : 41,
+		active : 41
+	}
+
+	this.sounds = {
+		tick : new Audio("sound/button-40.mp3"),
+		activate : new Audio("sound/button-35.mp3"),
+		win : new Audio("sound/beep-07.mp3"),
+		overlapper : new AudioOverlapper()
 	}
 
 	this.waitID = loadImgs(this.imgs); // load images
@@ -77,6 +84,7 @@ function GrineerHacker(){
 		this.speed = 0;
 		this.direction = 1;
 		this.timerPos = -112.5;
+		this.oldTimerPos = this.timerPos;
 		this.constRot = true;
 		this.wedges = [this.MAX_WEDGES];
 		this.wedSpdVal = 0; // number of wedges activated
@@ -92,7 +100,7 @@ function GrineerHacker(){
 		}
 	}
 
-	this.StartGame = function(ctx, numWedges, startSpd, constRot, wedSpdInc, callback, callValue){ // starts game instance
+	this.StartGame = function(ctx, numWedges, startSpd, constRot, wedSpdInc, sound, callback, callValue){ // starts game instance
 		//console.log("Starting game: " + numWedges + " " + startSpd + " " + constRot);
 		//console.log(this.imgs);
 		this.reset();
@@ -103,6 +111,7 @@ function GrineerHacker(){
 		this.setWedges(numWedges);
 		this.speed = startSpd;
 		this.wedSpdInc = wedSpdInc;
+		this.soundPlay = sound;
 		this.constRot = constRot;
 		this.callValue = callValue;
 
@@ -248,12 +257,25 @@ function GrineerHacker(){
 			for(var a = 0; a < this.MAX_WEDGES; a++){
 				if(this.wedges[a] != undefined && this.wedges[a].active != undefined){ // if wedge at position
 					//console.log("drawing wedge " + a + "  " + [this.wedges]);
-					// draw wedge
+					// draw wedges
 					img = this.imgs.file[this.imgs.names.indexOf("wedge")];
 					offset = this.off.wedge;
 					if(selWedge == a || 8 + selWedge == a){
 						img = this.imgs.file[this.imgs.names.indexOf("wedge1")];
+
+						// determine if active wedge has changed
+						var now = Math.floor((this.timerPos - 22.5) / 45);
+						var old = Math.floor((this.oldTimerPos - 22.5) / 45);
+						if(this.direction == 1 && now > old || this.direction == -1 && old > now){
+							if(this.soundPlay){
+								this.sounds.overlapper.play(this.sounds.tick);// TICK SOUND HERE
+							}
+						}
+
 						if(this.spacePressed){
+							if(this.soundPlay){
+								this.sounds.overlapper.play(this.sounds.activate);// ACTIVATION SOUND HERE
+							}
 							if(this.wedges[a].active){
 								this.wedSpdVal -= 1;
 							}else{
@@ -286,12 +308,16 @@ function GrineerHacker(){
 			}
 		this.ctx.translate(-this.dim[0]/2, -this.dim[1]/2);
 
+		this.oldTimerPos = this.timerPos;
 		this.timerPos += this.speed * this.direction; // update timer position
 		if(this.wedSpdInc){ // if speed should increase by number of wedges activated
 			this.timerPos += this.wedIncrem * this.wedSpdVal * this.direction;
 		}
 
 		if(this.checkGoalState()){
+			if(this.soundPlay){
+				this.sounds.win.play();// WIN SOUND HERE
+			}
 			this.stats.won = true;
 			this.endGame();
 			return;

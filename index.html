@@ -15,6 +15,12 @@
 			<img src="images/menus/active.png"><br>
 			However, if you try to activate a wedge that's already activated, you'll undo the original activation!<br>
 			Select a difficulty and start the game:</p>
+
+			<input type="checkbox" onclick="toggleSound()" checked>Sound<br>
+			Sounds provided by <a href="http://www.soundjay.com">soundjay.com</a>
+			<br><br>
+
+
 			Endless Game:
 			<button type="button" id="E_start" onClick="endlessStart()">Start</button>
 			<button type="button" onClick="display('SCORES')">High Scores</button>
@@ -67,6 +73,7 @@
 			<canvas id="renderWindow">Your browser does not support the HTML5 canvas tag.</canvas>
 		</div>
 
+		<script src="javascripts/AudioOverlapper.js" type="text/javascript"></script>
 		<script src="javascripts/GrineerHacker.js" type="text/javascript"></script>
 		<script src="javascripts/highScores.js" type="text/javascript"></script>
 		<script src="javascripts/menu.js" type="text/javascript"></script>
