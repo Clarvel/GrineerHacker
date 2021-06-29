@@ -1,7 +1,9 @@
 Grineer Hacker
 ==========
 
-Play the Grineer Hacking minigame from Warframe
+A browser based clone of the Grineer Hacking minigame from Warframe
+
+Play [here](http://clarvel.github.io/GrineerHacker/)
 
 ==========
 
